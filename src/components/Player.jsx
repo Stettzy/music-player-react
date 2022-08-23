@@ -1,7 +1,6 @@
-import {React, useRef} from "react";
+import {React, useRef, useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faStop, faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-
+import { faPlay, faPause, faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 const Player = ({ currentSong, isPlaying, setIsPlaying }) => {
     // Ref
@@ -14,23 +13,49 @@ const Player = ({ currentSong, isPlaying, setIsPlaying }) => {
         } else {
             audioRef.current.play();
         }
-        
+
         setIsPlaying(!isPlaying);
+    }
+
+    // State
+    const [songInfo, setSongInfo] = useState({
+        currentTime: 0,
+        duration: 0
+    });
+
+    // Update current song time
+    const timeUpdateHandler = (e) => {
+        const current = e.target.currentTime;
+        const duration = e.target.duration;
+        setSongInfo({ ...songInfo, currentTime: current, duration: duration});
+    }
+
+    // Conver seconds to minutes
+    const timeToMinutes = (time) => {
+        return (
+            Math.floor(time / 60) + ':' + ("0" + Math.floor(time % 60)).slice(-2)
+        )
+    }
+
+    // Allow slider dragging to modify song current time
+    const dragHandler = (e) => {
+        audioRef.current.currentTime = e.target.value;
+        setSongInfo({...songInfo, currentTime: e.target.value});
     }
 
     return (
         <div className="player-container">
             <div className="time-control">
-                <p>Start Time</p>
-                <input type="range" />
-                <p>End Time</p>
+                <p>{timeToMinutes(songInfo.currentTime)}</p>
+                <input onChange={dragHandler} min={0} max={songInfo.duration} value={songInfo.currentTime} type="range" />
+                <p>{timeToMinutes(songInfo.duration)}</p>
             </div>
             <div className="play-control">
                 <FontAwesomeIcon className="prev" icon={faAngleLeft} /> 
-                <FontAwesomeIcon onClick={playSongHandler} className="play" icon={faPlay} /> 
-                <FontAwesomeIcon className="next" icon={faAngleRight} /> 
+                <FontAwesomeIcon onClick={playSongHandler} className="play" icon={isPlaying ? faPause : faPlay} /> 
+                <FontAwesomeIcon className="next" icon={faAngleRight} />
             </div>
-            <audio ref={audioRef} src={currentSong.audio}></audio>
+            <audio onLoadedMetadata={timeUpdateHandler} onTimeUpdate={timeUpdateHandler} ref={audioRef} src={currentSong.audio}></audio>
         </div>
     );
 }
