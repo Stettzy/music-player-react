@@ -1,0 +1,28 @@
+nav {
+    min-height: 10vh;
+    display: flex;
+    position: fixed;
+    right: 25px;
+    top: 25px;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 10;
+
+    button {
+        background: #fff;
+        border: 1px solid gray;
+        padding: 15px 25px;
+        border-radius: 25px;
+        cursor: pointer;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    nav {
+        top: 0px;
+        right: 25px;
+    }
+    button {
+        padding: 15px 20px;
+    }
+}
