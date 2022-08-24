@@ -38,7 +38,8 @@ const chillHop = () => {
                 audio: 'https://mp3.chillhop.com/serve.php/?mp3=42445',
                 active: false,
                 colors: ['#cdc6bc', '#14517d']
-            },            {
+            },
+            {
                 id: uuidv4(),
                 name: 'Home',
                 artist: 'Idealism, SwuM',
@@ -46,7 +47,16 @@ const chillHop = () => {
                 audio: 'https://mp3.chillhop.com/serve.php/?mp3=43679',
                 active: false,
                 colors: ['#a68574', '#4b4632']
-            }
+            },
+            {
+                id: uuidv4(),
+                name: 'Passing Time',
+                artist: 'Knowmadic',
+                cover: 'https://i.scdn.co/image/ab67616d0000b273fca90fd7b378efe6b6598e8a',
+                audio: 'https://mp3.chillhop.com/serve.php/?mp3=41652',
+                active: false,
+                colors: ['#db9847', '#441923']
+            },
         ]
     )
 }
