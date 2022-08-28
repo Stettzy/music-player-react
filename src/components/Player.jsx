@@ -1,4 +1,4 @@
-import { React, useEffect } from "react";
+import { React } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { playAudio } from "../util";
@@ -25,24 +25,27 @@ const Player = ({ currentSong, isPlaying, setIsPlaying, audioRef, songInfo, setS
         const songIndex = songs.findIndex((song) => song.id === currentSong.id);
         if (direction === 'next') {
             setCurrentSong(songs[(songIndex + 1) % songs.length]);
+            activeLibraryHandler(songs[(songIndex + 1) % songs.length]);
         }
         
         if (direction === 'prev') {
             if ((songIndex - 1 % songs.length === -1)) {
                 setCurrentSong(songs[songs.length - 1]);
                 playAudio(isPlaying, audioRef);
+                activeLibraryHandler(songs[songs.length - 1]);
                 return;
             }
             setCurrentSong(songs[(songIndex - 1) % songs.length]);
+            activeLibraryHandler(songs[(songIndex - 1) % songs.length]);
         }
 
         playAudio(isPlaying, audioRef);
     }
 
-    useEffect(() => {
+    const activeLibraryHandler = (direction) => {
         // Add Active state
         const newSongs = songs.map(song => {
-            if (song.id === currentSong.id) {
+            if (song.id === direction.id) {
                 return { ...song, active: true }
             } else {
                 return { ...song, active: false }
@@ -50,7 +53,7 @@ const Player = ({ currentSong, isPlaying, setIsPlaying, audioRef, songInfo, setS
         });
 
         setSongs(newSongs);
-    }, [currentSong]);
+    }
 
     const animationStyle = {
         transform: `translate(${songInfo.animationPercentage}%)`,
